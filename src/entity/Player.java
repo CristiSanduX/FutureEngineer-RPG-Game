@@ -1,4 +1,5 @@
 package entity;
+
 import main.GamePanel;
 import main.KeyHandler;
 
@@ -12,8 +13,7 @@ public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyHandler;
 
-    public Player(GamePanel gp, KeyHandler keyHandler)
-    {
+    public Player(GamePanel gp, KeyHandler keyHandler) {
         this.gp = gp;
         this.keyHandler = keyHandler;
 
@@ -26,17 +26,16 @@ public class Player extends Entity {
         setDefaultValues();
         getPlayerImage();
     }
-    public void setDefaultValues()
-    {
-        x=30*gp.tileSize;
-        y=gp.tileSize;      //poziția inițială a caracterului (linia 2, coloana 31)
-        speed=3;
+
+    public void setDefaultValues() {
+        x = 30 * gp.tileSize;
+        y = gp.tileSize;       //poziția inițială a caracterului (linia 2, coloana 31)
+        speed = 3;             //viteza de deplasare caracterului
         direction = "down";
     }
 
-    public void getPlayerImage()
-    {
-        try{
+    public void getPlayerImage() {
+        try {
             up1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_up_1.png")));
             up2 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_up_2.png")));
             down1 = ImageIO.read(Objects.requireNonNull(getClass().getResourceAsStream("/player/boy_down_1.png")));
@@ -49,41 +48,39 @@ public class Player extends Entity {
             e.printStackTrace();
         }
     }
+
     public void update() {
         if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
             if (keyHandler.upPressed) {
-                    direction = "up";
-
-            }
-            else if (keyHandler.leftPressed) {
+                direction = "up";
+            } else if (keyHandler.leftPressed) {
                 direction = "left";
-            }
-            else if (keyHandler.downPressed) {
+            } else if (keyHandler.downPressed) {
                 direction = "down";
-            }
-            else {
+            } else {
                 direction = "right";
             }
 
-        collisionOn = false;
-        gp.collisionChecker.checkTile(this);
+            collisionOn = false;
+            gp.collisionChecker.checkTile(this);
 
-        if (!collisionOn) {
-            switch (direction) {
-                case "up":
-                    y -= speed;
-                    break;
-                case "down":
-                    y += speed;
-                    break;
-                case "left":
-                    x -= speed;
-                    break;
-                case "right":
-                    x += speed;
-                    break;
+            if (!collisionOn) {
+                switch (direction) {
+                    case "up":
+                        y -= speed;
+                        break;
+                    case "down":
+                        y += speed;
+                        break;
+                    case "left":
+                        x -= speed;
+                        break;
+                    case "right":
+                        x += speed;
+                        break;
+                }
             }
-        }
+
             spriteCounter++;
             if (spriteCounter > 10) {
                 if (spriteNum == 1)
@@ -93,14 +90,12 @@ public class Player extends Entity {
 
                 spriteCounter = 0;
             }
+        }
     }
 
-    }
-    public void draw(Graphics2D g2)
-    {
+    public void draw(Graphics2D g2) {
         BufferedImage image = null;
-        switch (direction)
-        {
+        switch (direction) {
             case "up":
                 if (spriteNum == 1)
                     image = up1;
@@ -126,6 +121,6 @@ public class Player extends Entity {
                     image = right2;
                 break;
         }
-        g2.drawImage(image,x,y,28,28,null);
+        g2.drawImage(image, x, y, 28, 28, null);
     }
 }
