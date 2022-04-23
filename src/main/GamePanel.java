@@ -22,6 +22,7 @@ public class GamePanel extends JPanel implements Runnable {
     TileManager tileM = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
+    Sound sound = new Sound();   //introducere sunet joc
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyHandler);
 
@@ -39,8 +40,15 @@ public class GamePanel extends JPanel implements Runnable {
         gameThread.start();
     }
 
+    public void playMusic(int i) {
+        sound.setFile(i);
+        sound.play();
+        sound.loop();
+    }
+
     @Override
     public void run() {
+        playMusic(0);
         double drawInterval = (double) 1000000000 / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();

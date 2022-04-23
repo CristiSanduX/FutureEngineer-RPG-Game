@@ -30,7 +30,7 @@ public class Player extends Entity {
     public void setDefaultValues() {
         x = 30 * gp.tileSize;
         y = gp.tileSize;       //poziția inițială a caracterului (linia 2, coloana 31)
-        speed = 3;             //viteza de deplasare caracterului
+        speed = 2;             //viteza de deplasare caracterului
         direction = "down";
     }
 
