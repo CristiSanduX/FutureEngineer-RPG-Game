@@ -128,7 +128,7 @@ public class GamePanel extends JPanel implements Runnable {
         Tile.hotelTile.DrawHotel(g2, 34 * Tile.TILE_HEIGHT, 0);
         Tile.dormTile.DrawDorm(g2, 32 * Tile.TILE_WIDTH, 6 * Tile.TILE_HEIGHT);
         Tile.mcdonaldTile.DrawMcDonalds(g2, 16 * Tile.TILE_WIDTH, 9 * Tile.TILE_WIDTH);  //Clădiri
-        Tile.kfcTile.DrawKFC(g2, 2 * Tile.TILE_WIDTH, 15 * Tile.TILE_WIDTH);
+        Tile.kfcTile.DrawKFC(g2, 3 * Tile.TILE_WIDTH, 15 * Tile.TILE_WIDTH);
         Tile.ACTile.Draw2(g2, 0, 0);
 
         Tile.carTile.DrawOpelCar(g2, 32 * Tile.TILE_WIDTH, 2 * Tile.TILE_HEIGHT);
