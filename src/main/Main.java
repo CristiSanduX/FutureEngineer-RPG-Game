@@ -16,6 +16,8 @@ public class Main {
 
         window.setLocationRelativeTo(null);              //poziție nespecificată, fereastra va fi poziționată în centru
         window.setVisible(true);                         //fără această instrucțiune, fereastra nu ar fi vizibilă
+
+        gamePanel.setupGame();
         gamePanel.startGameThread();
     }
 }

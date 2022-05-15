@@ -20,11 +20,18 @@ public class GamePanel extends JPanel implements Runnable {
 
     int FPS = 60;
     TileManager tileM = new TileManager(this);
-    KeyHandler keyHandler = new KeyHandler();
+    public UI ui = new UI(this);
+    KeyHandler keyHandler = new KeyHandler(this);
     Thread gameThread;
     Sound sound = new Sound();   //introducere sunet joc
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyHandler);
+
+
+    //GAME STATE
+    public int gameState;
+    public final int playState=1;
+    public final int pauseState = 2;
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));    //setarea dimensiunii ferestrei jocului
@@ -33,6 +40,12 @@ public class GamePanel extends JPanel implements Runnable {
         this.addKeyListener(keyHandler);
         this.setFocusable(true);                                     //pentru citirea tastelor
         Assets.Init();
+    }
+
+    public void setupGame()
+    {
+        playMusic(0);
+        gameState = playState;
     }
 
     public void startGameThread() {
@@ -48,7 +61,7 @@ public class GamePanel extends JPanel implements Runnable {
 
     @Override
     public void run() {
-        playMusic(0);
+
         double drawInterval = (double) 1000000000 / FPS;
         double delta = 0;
         long lastTime = System.nanoTime();
@@ -73,7 +86,9 @@ public class GamePanel extends JPanel implements Runnable {
     }
 
     public void update() {
-        player.update();
+        if (gameState == playState) {
+            player.update();
+        }
     }
 
     public void paintComponent(Graphics g) {
@@ -136,6 +151,7 @@ public class GamePanel extends JPanel implements Runnable {
         Tile.dusterTile.DrawDuster(g2, 32 * Tile.TILE_WIDTH, 4 * Tile.TILE_HEIGHT);
 
         player.draw(g2);
+        ui.draw(g2);
         g2.dispose();
     }
 }
