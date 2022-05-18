@@ -19,6 +19,7 @@ public class Assets {
     public static BufferedImage pavaj;
     public static BufferedImage McDonald;
     public static BufferedImage KFC;
+    public static BufferedImage background;
 
     public static void Init() {
         SpriteSheet sheetGrass = new SpriteSheet(ImageLoader.LoadImage("/textures/grass2.jpg"));
@@ -34,6 +35,8 @@ public class Assets {
         SpriteSheet sheetDuster = new SpriteSheet(ImageLoader.LoadImage("/textures/Duster.png"));
         SpriteSheet sheetMc = new SpriteSheet(ImageLoader.LoadImage("/textures/McDonald's.png"));
         SpriteSheet sheetKFC = new SpriteSheet(ImageLoader.LoadImage("/textures/KFC.png"));
+        SpriteSheet sheetBackground = new SpriteSheet(ImageLoader.LoadImage("/textures/Background.jpg"));
+
 
         AC = sheetAC.crop2(0, 0);
         grass2 = sheetGrass.crop(0, 0);
@@ -51,5 +54,6 @@ public class Assets {
         McDonald = sheetMc.cropMc(0, 0);
         KFC = sheetKFC.cropKFC(0, 0);
         tree = sheetTree.cropTree(0, 0);
+        background = sheetBackground.cropBackground(0,0);
     }
 }

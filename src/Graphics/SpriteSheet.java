@@ -67,4 +67,7 @@ public class SpriteSheet {
     public BufferedImage cropKFC(int x, int y) {
         return spriteSheet.getSubimage(x, y, 572, 256);
     }
+    public BufferedImage cropBackground(int x, int y) {
+        return spriteSheet.getSubimage(x, y, 640, 467);
+    }
 }

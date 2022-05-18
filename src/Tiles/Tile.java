@@ -19,6 +19,7 @@ public class Tile {
     public static Tile dusterTile = new DusterTile(12);
     public static Tile mcdonaldTile = new McDonaldTile(13);
     public static Tile kfcTile = new KFCTile(14);
+    public static Tile backgroundTile = new BackgroundTile(15);
 
     public static final int TILE_WIDTH = 32;
     public static final int TILE_HEIGHT = 32;
@@ -73,5 +74,9 @@ public class Tile {
 
     public void DrawDuster(Graphics g, int x, int y) {
         g.drawImage(img, x, y, 882 / 14, 502 / 14, null);
+    }
+
+    public void DrawBackground(Graphics g, int x, int y) {
+        g.drawImage(img,x,y,1248,624,null);
     }
 }

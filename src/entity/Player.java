@@ -12,6 +12,7 @@ import java.util.Objects;
 public class Player extends Entity {
     GamePanel gp;
     KeyHandler keyHandler;
+    int nrClock = 0;
 
     public Player(GamePanel gp, KeyHandler keyHandler) {
         this.gp = gp;
@@ -20,6 +21,8 @@ public class Player extends Entity {
         solidArea = new Rectangle();
         solidArea.x = 4;
         solidArea.y = 0;
+        solidAreaDefaultX = solidArea.x;
+        solidAreaDefaultY = solidArea.y;
         solidArea.width = 20;
         solidArea.height = 24;
 
@@ -64,6 +67,10 @@ public class Player extends Entity {
             collisionOn = false;
             gp.collisionChecker.checkTile(this);
 
+            //OBJECT
+            int objIndex = gp.collisionChecker.checkObject(this,true);
+            pickUpObject(objIndex);
+
             if (!collisionOn) {
                 switch (direction) {
                     case "up":
@@ -94,6 +101,22 @@ public class Player extends Entity {
         else
         {
             spriteNum = 1;
+        }
+    }
+
+    public void pickUpObject(int i) {
+        if (i != 999) {
+            String objectName = gp.obj[i].name;
+
+            switch (objectName) {
+                case "Time":
+                    nrClock++;
+                    gp.obj[i]=null;
+                    System.out.println("Clock : "+nrClock);
+                    gp.ui.showMessage("+10 secunde!");
+                    break;
+
+            }
         }
     }
 

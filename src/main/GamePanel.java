@@ -3,6 +3,7 @@ package main;
 import Graphics.Assets;
 import Tiles.Tile;
 import entity.Player;
+import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
@@ -26,10 +27,11 @@ public class GamePanel extends JPanel implements Runnable {
     Sound sound = new Sound();   //introducere sunet joc
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyHandler);
-
-
+    public SuperObject[] obj = new SuperObject[10];
+    public AssetSetter assetSetter = new AssetSetter(this);
     //GAME STATE
     public int gameState;
+    public final int titleState=0;
     public final int playState=1;
     public final int pauseState = 2;
 
@@ -44,8 +46,9 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void setupGame()
     {
+        assetSetter.setObject();
         playMusic(0);
-        gameState = playState;
+        gameState = titleState;
     }
 
     public void startGameThread() {
@@ -57,6 +60,11 @@ public class GamePanel extends JPanel implements Runnable {
         sound.setFile(i);
         sound.play();
         sound.loop();
+    }
+    public  void stopMusic()
+    {
+
+        sound.stop();
     }
 
     @Override
@@ -87,71 +95,91 @@ public class GamePanel extends JPanel implements Runnable {
 
     public void update() {
         if (gameState == playState) {
+
             player.update();
         }
+
     }
 
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
 
-        tileM.draw(g2);                          //Încărcare matrice de tile-uri
+        //TITLE SCREEN
+        if (gameState == titleState) {
+            Tile.backgroundTile.DrawBackground(g,0,0);
+            ui.draw(g2);
 
-        for (int i = 1; i <= 29; i++)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 13 * Tile.TILE_WIDTH);
-        for (int i = 1; i <= 16; i++)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 18 * Tile.TILE_WIDTH);
-        for (int i = 17; i >= 2; i--)
-            Tile.streetTile3.DrawStreet(g, 30 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
-        Tile.streetTile2.DrawStreet(g, 15 * Tile.TILE_WIDTH, 13 * Tile.TILE_WIDTH);
-        for (int i = 18; i >= 4; i--)
-            Tile.streetTile3.DrawStreet(g, Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
-        for (int i = 17; i >= 1; i--)
-            Tile.streetTile3.DrawStreet(g, 15 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
-        for (int i = 14; i >= 6; i--)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
-        for (int i = 4; i >= 2; i--)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);
-        for (int i = 6; i <= 8; i++)
-            Tile.streetTile3.DrawStreet(g, 5 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
-        for (int i = 6; i <= 20; i++)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 8 * Tile.TILE_WIDTH);
-        for (int i = 13; i >= 3; i--)
-            Tile.streetTile3.DrawStreet(g, 21 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
-        for (int i = 21; i <= 30; i++)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 3 * Tile.TILE_WIDTH);
-        Tile.streetTile5.DrawStreet2(g, 21 * Tile.TILE_WIDTH, 3 * Tile.TILE_WIDTH);
-        Tile.streetTile5.DrawStreet2(g, 30 * Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
-        for (int i = 31; i <= 33; i++)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
-        for (int i = 16; i <= 30; i++)
-            Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 18 * Tile.TILE_WIDTH);  //Străzi
+        }
+        else {
+            tileM.draw(g2);                          //Încărcare matrice de tile-uri
 
-        Tile.treeTile.DrawTree(g, 6 * Tile.TILE_WIDTH, 5 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 6 * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 7 * Tile.TILE_WIDTH, 5 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 7 * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 6 * Tile.TILE_WIDTH, 11 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 13 * Tile.TILE_WIDTH, 15 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 13 * Tile.TILE_WIDTH, 13 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 11 * Tile.TILE_WIDTH, 9 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 12 * Tile.TILE_WIDTH, 9 * Tile.TILE_WIDTH);
-        for (int i = 8; i <= 12; i++)
-            Tile.treeTile.DrawTree(g, i * Tile.TILE_WIDTH, 2 * Tile.TILE_WIDTH);
-        Tile.treeTile.DrawTree(g, 17 * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);            //Copaci
+            for (int i = 1; i <= 29; i++)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 13 * Tile.TILE_WIDTH);
+            for (int i = 1; i <= 16; i++)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 18 * Tile.TILE_WIDTH);
+            for (int i = 17; i >= 2; i--)
+                Tile.streetTile3.DrawStreet(g, 30 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
+            Tile.streetTile2.DrawStreet(g, 15 * Tile.TILE_WIDTH, 13 * Tile.TILE_WIDTH);
+            for (int i = 18; i >= 4; i--)
+                Tile.streetTile3.DrawStreet(g, Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
+            for (int i = 17; i >= 1; i--)
+                Tile.streetTile3.DrawStreet(g, 15 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
+            for (int i = 14; i >= 6; i--)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
+            for (int i = 4; i >= 2; i--)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);
+            for (int i = 6; i <= 8; i++)
+                Tile.streetTile3.DrawStreet(g, 5 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
+            for (int i = 6; i <= 20; i++)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 8 * Tile.TILE_WIDTH);
+            for (int i = 13; i >= 3; i--)
+                Tile.streetTile3.DrawStreet(g, 21 * Tile.TILE_WIDTH, i * Tile.TILE_WIDTH);
+            for (int i = 21; i <= 30; i++)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 3 * Tile.TILE_WIDTH);
+            Tile.streetTile5.DrawStreet2(g, 21 * Tile.TILE_WIDTH, 3 * Tile.TILE_WIDTH);
+            Tile.streetTile5.DrawStreet2(g, 30 * Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
+            for (int i = 31; i <= 33; i++)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, Tile.TILE_HEIGHT);
+            for (int i = 16; i <= 30; i++)
+                Tile.streetTile.DrawStreet(g, i * Tile.TILE_WIDTH, 18 * Tile.TILE_WIDTH);  //Străzi
 
-        Tile.hotelTile.DrawHotel(g2, 34 * Tile.TILE_HEIGHT, 0);
-        Tile.dormTile.DrawDorm(g2, 32 * Tile.TILE_WIDTH, 6 * Tile.TILE_HEIGHT);
-        Tile.mcdonaldTile.DrawMcDonalds(g2, 16 * Tile.TILE_WIDTH, 9 * Tile.TILE_WIDTH);  //Clădiri
-        Tile.kfcTile.DrawKFC(g2, 3 * Tile.TILE_WIDTH, 15 * Tile.TILE_WIDTH);
-        Tile.ACTile.Draw2(g2, 0, 0);
+            Tile.treeTile.DrawTree(g, 6 * Tile.TILE_WIDTH, 5 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 6 * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 7 * Tile.TILE_WIDTH, 5 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 7 * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 6 * Tile.TILE_WIDTH, 11 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 13 * Tile.TILE_WIDTH, 15 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 13 * Tile.TILE_WIDTH, 13 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 11 * Tile.TILE_WIDTH, 9 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 12 * Tile.TILE_WIDTH, 9 * Tile.TILE_WIDTH);
+            for (int i = 8; i <= 12; i++)
+                Tile.treeTile.DrawTree(g, i * Tile.TILE_WIDTH, 2 * Tile.TILE_WIDTH);
+            Tile.treeTile.DrawTree(g, 17 * Tile.TILE_WIDTH, 6 * Tile.TILE_WIDTH);            //Copaci
 
-        Tile.carTile.DrawOpelCar(g2, 32 * Tile.TILE_WIDTH, 2 * Tile.TILE_HEIGHT);
-        Tile.BMWCarTile.DrawBMWCar(g2, 32 * Tile.TILE_WIDTH, 3 * Tile.TILE_HEIGHT);      //Mașini
-        Tile.dusterTile.DrawDuster(g2, 32 * Tile.TILE_WIDTH, 4 * Tile.TILE_HEIGHT);
+            Tile.hotelTile.DrawHotel(g2, 34 * Tile.TILE_HEIGHT, 0);
+            Tile.dormTile.DrawDorm(g2, 32 * Tile.TILE_WIDTH, 6 * Tile.TILE_HEIGHT);
+            Tile.mcdonaldTile.DrawMcDonalds(g2, 16 * Tile.TILE_WIDTH, 9 * Tile.TILE_WIDTH);  //Clădiri
+            Tile.kfcTile.DrawKFC(g2, 3 * Tile.TILE_WIDTH, 15 * Tile.TILE_WIDTH);
+            Tile.ACTile.Draw2(g2, 0, 0);
 
-        player.draw(g2);
-        ui.draw(g2);
-        g2.dispose();
+            Tile.carTile.DrawOpelCar(g2, 32 * Tile.TILE_WIDTH, 2 * Tile.TILE_HEIGHT);
+            Tile.BMWCarTile.DrawBMWCar(g2, 32 * Tile.TILE_WIDTH, 3 * Tile.TILE_HEIGHT);      //Mașini
+            Tile.dusterTile.DrawDuster(g2, 32 * Tile.TILE_WIDTH, 4 * Tile.TILE_HEIGHT);
+
+            //OBJECT
+            for (SuperObject superObject : obj) {
+                if (superObject != null) {
+                    superObject.draw(g2, this);
+                }
+            }
+
+            player.draw(g2);
+            ui.draw(g2);
+            g2.dispose();
+
+        }
+
+
     }
 }
