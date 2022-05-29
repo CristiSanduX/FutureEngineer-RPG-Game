@@ -2,12 +2,15 @@ package main;
 
 import Graphics.Assets;
 import Tiles.Tile;
+import database.Database;
+import entity.Entity;
 import entity.Player;
 import object.SuperObject;
 import tile.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
+import java.sql.SQLException;
 
 //mă voi folosi de containerul JPanel pentru butoane, câmpuri text, imagini, tile-uri etc.
 public class GamePanel extends JPanel implements Runnable {
@@ -19,21 +22,27 @@ public class GamePanel extends JPanel implements Runnable {
     public final int screenWidth = tileSize * maxScreenCol;        //1248px
     public final int screenHeight = tileSize * maxScreenRow;       //624px
 
+
+
+
     int FPS = 60;
     TileManager tileM = new TileManager(this);
     public UI ui = new UI(this);
     KeyHandler keyHandler = new KeyHandler(this);
     Thread gameThread;
     Sound sound = new Sound();   //introducere sunet joc
+    Sound se = new Sound();
     public CollisionChecker collisionChecker = new CollisionChecker(this);
     public Player player = new Player(this, keyHandler);
     public SuperObject[] obj = new SuperObject[10];
+    public Entity[] npc = new Entity[10];
     public AssetSetter assetSetter = new AssetSetter(this);
     //GAME STATE
     public int gameState;
     public final int titleState=0;
     public final int playState=1;
     public final int pauseState = 2;
+
 
     public GamePanel() {
         this.setPreferredSize(new Dimension(screenWidth, screenHeight));    //setarea dimensiunii ferestrei jocului
@@ -47,8 +56,10 @@ public class GamePanel extends JPanel implements Runnable {
     public void setupGame()
     {
         assetSetter.setObject();
+        assetSetter.setNPC();
         playMusic(0);
         gameState = titleState;
+
     }
 
     public void startGameThread() {
@@ -61,12 +72,16 @@ public class GamePanel extends JPanel implements Runnable {
         sound.play();
         sound.loop();
     }
-    public  void stopMusic()
+    public void stopMusic()
     {
-
         sound.stop();
     }
+    public void playSE(int i) {
 
+        se.setFile(i);
+        se.play();
+
+    }
     @Override
     public void run() {
 
@@ -97,6 +112,11 @@ public class GamePanel extends JPanel implements Runnable {
         if (gameState == playState) {
 
             player.update();
+            for (int i=0; i< npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].update();
+                }
+            }
         }
 
     }
@@ -108,7 +128,11 @@ public class GamePanel extends JPanel implements Runnable {
         //TITLE SCREEN
         if (gameState == titleState) {
             Tile.backgroundTile.DrawBackground(g,0,0);
-            ui.draw(g2);
+            try {
+                ui.draw(g2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         }
         else {
@@ -174,8 +198,21 @@ public class GamePanel extends JPanel implements Runnable {
                 }
             }
 
+            //NPC
+            for (int i=0; i<npc.length; i++) {
+                if (npc[i] != null) {
+                    npc[i].draw(g2);
+                }
+            }
+
             player.draw(g2);
-            ui.draw(g2);
+
+            try {
+                ui.draw(g2);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+
             g2.dispose();
 
         }

@@ -1,9 +1,12 @@
 package main;
 
+import database.Database;
+
 import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
+
         //JFrame este un container ce ne oferă posibilitatea să afișăm o fereastră pe ecran.
         JFrame window = new JFrame();
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //fereastra se va închide la apăsarea butonului "X"

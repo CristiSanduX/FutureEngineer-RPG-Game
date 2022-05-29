@@ -10,12 +10,13 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Player extends Entity {
-    GamePanel gp;
+
     KeyHandler keyHandler;
     int nrClock = 0;
 
     public Player(GamePanel gp, KeyHandler keyHandler) {
-        this.gp = gp;
+        super(gp);
+
         this.keyHandler = keyHandler;
 
         solidArea = new Rectangle();
@@ -52,6 +53,7 @@ public class Player extends Entity {
         }
     }
 
+
     public void update() {
         if (keyHandler.upPressed || keyHandler.downPressed || keyHandler.leftPressed || keyHandler.rightPressed) {
             if (keyHandler.upPressed) {
@@ -68,7 +70,7 @@ public class Player extends Entity {
             gp.collisionChecker.checkTile(this);
 
             //OBJECT
-            int objIndex = gp.collisionChecker.checkObject(this,true);
+            int objIndex = gp.collisionChecker.checkObject(this, true);
             pickUpObject(objIndex);
 
             if (!collisionOn) {
@@ -97,9 +99,7 @@ public class Player extends Entity {
 
                 spriteCounter = 0;
             }
-        }
-        else
-        {
+        } else {
             spriteNum = 1;
         }
     }
@@ -110,12 +110,17 @@ public class Player extends Entity {
 
             switch (objectName) {
                 case "Time":
+                    gp.playSE(1);
                     nrClock++;
-                    gp.obj[i]=null;
-                    System.out.println("Clock : "+nrClock);
+                    gp.obj[i] = null;
+                    System.out.println("Clock : " + nrClock);
                     gp.ui.showMessage("+10 secunde!");
                     break;
-
+                case "Finish":
+                    gp.ui.gameFinished = true;
+                    gp.stopMusic();
+                    gp.playSE(2);
+                    break;
             }
         }
     }
